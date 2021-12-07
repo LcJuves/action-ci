@@ -37,5 +37,6 @@ jobs:
         with:
           name: AppImages
           tag_name: AppImages
+          prerelease: true
           files: |
             **/out/*.AppImage
