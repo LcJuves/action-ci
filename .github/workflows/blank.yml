@@ -38,4 +38,4 @@ jobs:
           name: AppImages
           tag_name: AppImages
           files: |
-            ../out/*.AppImage
+            **/out/*.AppImage
