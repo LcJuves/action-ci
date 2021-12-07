@@ -21,6 +21,7 @@ ingredients:
     - deb http://archive.ubuntu.com/ubuntu/ trusty main universe
   ppas:
     - remmina-ppa-team/remmina-next
-  script:
-    - curl -L -o ./remmina.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/remmina.desktop
-    - curl -L -o ./remmina.svg https://remmina.org/assets/images/org.remmina.Remmina.svg
+
+script:
+  - curl -L -o ./remmina.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/remmina.desktop
+  - curl -L -o ./remmina.svg https://remmina.org/assets/images/org.remmina.Remmina.svg
