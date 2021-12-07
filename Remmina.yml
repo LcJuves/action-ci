@@ -14,3 +14,4 @@ ingredients:
 
 script:
   - curl -L -o ./remmina.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/remmina.desktop
+  - curl -L -o ./remmina.svg https://remmina.org/assets/images/org.remmina.Remmina.svg
