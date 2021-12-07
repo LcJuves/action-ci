@@ -28,6 +28,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
+          sudo apt-add-repository ppa:remmina-ppa-team/remmina-next
+          sudo apt update
+          apt-cache search remmina-plugin
           wget -c https://github.com/$(wget -q https://github.com/AppImage/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)
           chmod +x ./pkg2appimage-*.AppImage
           ./pkg2appimage-*.AppImage Remmina.yml

@@ -6,6 +6,9 @@ ingredients:
     - remmina
     - remmina-plugin-rdp
     - remmina-plugin-secret
+    - remmina-plugin-nx
+    - remmina-plugin-ssh
+    - libfreerdp-plugins-standard
   dist: trusty
   sources:
     - deb http://archive.ubuntu.com/ubuntu/ trusty main universe
