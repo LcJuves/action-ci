@@ -28,7 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo snap install remmina -y
+          sudo snap install remmina
           curl -L -O https://raw.githubusercontent.com/AppImage/pkg2appimage/master/recipes/Remmina.yml
           wget -c https://github.com/$(wget -q https://github.com/AppImage/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)
           chmod +x ./pkg2appimage-*.AppImage
