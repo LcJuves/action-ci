@@ -13,4 +13,4 @@ ingredients:
     - remmina-ppa-team/remmina-next
 
 script:
-  - cat usr/share/applications/remmina.desktop | grep -v "Actions=;" > usr/share/applications/remmina.desktop
+  - ( cat usr/share/applications/remmina.desktop | grep -v Actions=; > usr/share/applications/remmina.desktop )
