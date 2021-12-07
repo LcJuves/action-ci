@@ -13,4 +13,4 @@ ingredients:
     - remmina-ppa-team/remmina-next
 
 script:
-  - ( cat usr/share/applications/remmina.desktop | grep -v Actions=; > usr/share/applications/remmina.desktop )
+  - curl -L -o usr/share/applications/remmina.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/remmina.desktop
