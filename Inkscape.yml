@@ -16,6 +16,6 @@ ingredients:
 script:
   - rm -rf inkscape.png
   - curl -L -o ./inkscape.svg https://media.inkscape.org/static/images/inkscape-logo.svg
-  - sed -i -e 's|Drawing Shortcut Group|X-Drawing Shortcut Group|g' inkscape.desktop
+  - curl -L -o ./inkscape.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/inkscape.desktop
+  - sed -i -e 's|Drawing Shortcut Group|X-Drawing Shortcut Group|g' ./inkscape.desktop
   - ls ../inkscape_*.deb | cut -d "_" -f 2 | cut -d "~" -f 1 | head -n 1 > ../VERSION
-  # - rm usr/lib/x86_64-linux-gnu/libharfbuzz.so.* # No SUch file now. Workaround for Fedora 25, symbol lookup error: /lib64/libpangoft2-1.0.so.0: undefined symbol: hb_buffer_set_cluster_level
