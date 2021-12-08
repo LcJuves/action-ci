@@ -27,4 +27,4 @@ script:
   - HERE="$(dirname "$(readlink -f "${0}")")"
   - PKG_DIR=$HERE/usr
   - set -x
-  - export LD_LIBRARY_PATH=$PKG_DIR/lib64:$PKG_DIR/lib:$LD_LIBRARY_PATH
+  - export LD_LIBRARY_PATH=$PKG_DIR/lib64:$PKG_DIR/lib:$PKG_DIR/lib/x86_64-linux-gnu/remmina/plugins:$LD_LIBRARY_PATH
