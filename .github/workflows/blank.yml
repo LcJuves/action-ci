@@ -34,6 +34,7 @@ jobs:
           wget -c https://github.com/$(wget -q https://github.com/AppImage/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)
           chmod +x ./pkg2appimage-*.AppImage
           ./pkg2appimage-*.AppImage Remmina.yml
+          ./pkg2appimage-*.AppImage Inkscape.yml
 
       - name: Release
         uses: softprops/action-gh-release@v1
