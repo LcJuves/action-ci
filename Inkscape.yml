@@ -7,10 +7,9 @@ ingredients:
     - python-lxml
     - python-numpy
     - python-scour
-  dist: trusty
+  dist: focal
   sources:
-    # - deb http://mirrors.aliyun.com/ubuntu/ trusty main universe
-    - deb http://us.archive.ubuntu.com/ubuntu/ trusty main universe
+    - deb http://us.archive.ubuntu.com/ubuntu/ focal main universe
   ppas:
     - inkscape.dev/stable
 

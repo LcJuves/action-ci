@@ -16,9 +16,9 @@ ingredients:
     - remmina-plugin-www
     - remmina-plugin-xdmcp
     - freerdp
-  dist: trusty
+  dist: focal
   sources:
-    - deb http://us.archive.ubuntu.com/ubuntu/ trusty main universe
+    - deb http://us.archive.ubuntu.com/ubuntu/ focal main universe
   ppas:
     - remmina-ppa-team/remmina-next
 
