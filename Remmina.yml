@@ -24,3 +24,7 @@ ingredients:
 
 script:
   - curl -L -O https://remmina.org/assets/images/org.remmina.Remmina.svg
+  - HERE="$(dirname "$(readlink -f "${0}")")"
+  - PKG_DIR=$HERE/usr
+  - set -x
+  - export LD_LIBRARY_PATH=$PKG_DIR/lib64:$PKG_DIR/lib:$LD_LIBRARY_PATH
