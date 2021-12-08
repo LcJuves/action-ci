@@ -22,7 +22,5 @@ ingredients:
   ppas:
     - remmina-ppa-team/remmina-next
 
-# script:
-#   - curl -L -o ./remmina.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/remmina.desktop
-#   - curl -L -o ./remmina.svg https://remmina.org/assets/images/org.remmina.Remmina.svg
-#   - ls ../remmina_*.deb | cut -d "_" -f 2 | cut -d "~" -f 1 | head -n 1 > ../VERSION
+script:
+  - curl -L -O https://remmina.org/assets/images/org.remmina.Remmina.svg
