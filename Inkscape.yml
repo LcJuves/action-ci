@@ -13,9 +13,9 @@ ingredients:
   ppas:
     - inkscape.dev/stable
 
-script:
-  - rm -rf inkscape.png
-  - curl -L -o ./inkscape.svg https://media.inkscape.org/static/images/inkscape-logo.svg
-  - curl -L -o ./inkscape.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/inkscape.desktop
-  - sed -i -e 's|Drawing Shortcut Group|X-Drawing Shortcut Group|g' ./inkscape.desktop
-  - ls ../inkscape_*.deb | cut -d "_" -f 2 | cut -d "~" -f 1 | head -n 1 > ../VERSION
+# script:
+#   - rm -rf inkscape.png
+#   - curl -L -o ./inkscape.svg https://media.inkscape.org/static/images/inkscape-logo.svg
+#   - curl -L -o ./inkscape.desktop https://raw.githubusercontent.com/LiangchengJ/appimage-ci/main/inkscape.desktop
+#   - sed -i -e 's|Drawing Shortcut Group|X-Drawing Shortcut Group|g' ./inkscape.desktop
+#   - ls ../inkscape_*.deb | cut -d "_" -f 2 | cut -d "~" -f 1 | head -n 1 > ../VERSION
