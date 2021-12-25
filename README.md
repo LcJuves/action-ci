@@ -1,2 +1,2 @@
 # action-ci
-[![CI](https://github.com/LiangchengJ/action-ci/actions/workflows/blank.yml/badge.svg)](https://github.com/LiangchengJ/action-ci/actions/workflows/blank.yml)
+[![Remmina AppImage CI](https://github.com/LiangchengJ/action-ci/actions/workflows/remmina-appimage-ci.yml/badge.svg)](https://github.com/LiangchengJ/action-ci/actions/workflows/remmina-appimage-ci.yml)
