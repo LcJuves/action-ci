@@ -86,7 +86,7 @@ jobs:
             rsyncd.conf.5
   cygwin-build:
     runs-on: windows-latest
-    if: (github.event_name == 'schedule' || contains(github.event.head_commit.message, '[buildall]'))
+    # if: (github.event_name == 'schedule' || contains(github.event.head_commit.message, '[buildall]'))
     steps:
       - uses: actions/checkout@v2
         with:
