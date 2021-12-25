@@ -1,22 +1,21 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Remmina AppImage CI
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  build-remmina-appimage:
     # The type of runner that the job will run on
     runs-on: ubuntu-18.04
 
@@ -26,20 +25,20 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
-      - name: Build AppImage
+      - name: Build Remmina AppImage
         run: |
           sudo apt-add-repository ppa:remmina-ppa-team/remmina-next
           sudo apt update
           apt-cache search remmina-plugin
           wget -c https://github.com/$(wget -q https://github.com/AppImage/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)
           chmod +x ./pkg2appimage-*.AppImage
-          ./pkg2appimage-*.AppImage Remmina.yml
+          ./pkg2appimage-*.AppImage ./appimage/Remmina.yml
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: AppImages
-          tag_name: AppImages
+          name: Remmina-AppImages
+          tag_name: Remmina-AppImages
           prerelease: true
           files: |
             **/out/*.AppImage
