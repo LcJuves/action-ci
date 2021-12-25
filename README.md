@@ -1,2 +1,2 @@
-# appimage-ci
-[![CI](https://github.com/LiangchengJ/appimage-ci/actions/workflows/blank.yml/badge.svg)](https://github.com/LiangchengJ/appimage-ci/actions/workflows/blank.yml)
+# action-ci
+[![CI](https://github.com/LiangchengJ/action-ci/actions/workflows/blank.yml/badge.svg)](https://github.com/LiangchengJ/action-ci/actions/workflows/blank.yml)
