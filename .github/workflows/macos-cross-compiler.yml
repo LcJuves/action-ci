@@ -1,0 +1,53 @@
+name: macOS cross compiler
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - $default-branch
+      - podock
+
+  pull_request:
+    branches:
+      - $default-branch
+      - podock
+
+  jobs:
+    main:
+      name: Main
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Prepare
+          run: echo "MACOS_CROSS_COMPILER=$PWD/macosx-cross-compiler" >>"$GITHUB_ENV"
+          shell: bash
+
+        - name: Building ...
+          run: |
+            # make sure you have a proper C/C++ native compiler first, as a suggestion:
+            sudo apt-get install llvm-dev libclang-dev clang libxml2-dev libz-dev libgmp-dev libmpfr-dev libmpc-dev -y
+
+            install -d $MACOS_CROSS_COMPILER/osxcross
+            cd $MACOS_CROSS_COMPILER || exit
+            git clone https://github.com/tpoechtrager/osxcross && cd osxcross || exit
+
+            # picked this version as they work well with godot-rust, feel free to change
+            git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
+
+            curl -L -O https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
+
+            # move the file where osxcross expects it to be
+            mv MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
+            # build and install osxcross
+            UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && OCDEBUG=1 ./build_gcc.sh
+
+            tar -cvJf target.tar.xz target
+            echo "OUT_TARBALL_PATH=$PWD/target.tar.xz" >>"$GITHUB_ENV"
+          shell: bash
+
+        - name: Publish compilation artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: Compilation
+            path: ${{ env.OUT_TARBALL_PATH }}
