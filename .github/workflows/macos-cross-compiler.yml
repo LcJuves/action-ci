@@ -16,7 +16,7 @@ on:
 jobs:
   main:
     name: Main
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Prepare
@@ -38,7 +38,7 @@ jobs:
           curl -L -O https://github.com/LiangchengJ/macos-cross-compiler/raw/25a045dd37e1b3e8172a01657f28807f1518557a/build_gcc.sh
 
           curl -L -O https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
-          echo "MACOS_SDK_TARBALL_PATH=$PWD/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
+          echo "MACOS_SDK_TARBALL_PATH=$MACOS_CROSS_COMPILER/osxcross/tarballs/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
 
           # move the file where osxcross expects it to be
           mv MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
