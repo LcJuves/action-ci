@@ -50,10 +50,14 @@ jobs:
           echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
         shell: bash
 
-      - name: Publish compilation artifact
+      - name: Publish compiler artifact
         uses: actions/upload-artifact@v3
         with:
-          name: Compilation
-          path: |
-            ${{ env.OUT_TARBALL_PATH }}
-            ${{ env.MACOS_SDK_TARBALL_PATH }}
+          name: macOS Cross Compiler
+          path: ${{ env.OUT_TARBALL_PATH }}
+
+      - name: Publish sdk artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS SDK
+          path: ${{ env.MACOS_SDK_TARBALL_PATH }}
