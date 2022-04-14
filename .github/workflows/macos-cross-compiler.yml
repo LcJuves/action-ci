@@ -45,7 +45,7 @@ jobs:
           # build and install osxcross
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && OCDEBUG=1 ./build_gcc.sh
 
-          mv target macos-cross-compiler
+          cd ../../
           tar -cvJf macos-cross-compiler.tar.xz macos-cross-compiler
           echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
         shell: bash
