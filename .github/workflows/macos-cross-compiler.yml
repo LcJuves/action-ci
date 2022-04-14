@@ -11,7 +11,6 @@ on:
   pull_request:
     branches:
       - $default-branch
-      - podock
 
 jobs:
   main:
@@ -19,44 +18,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Prepare
-        run: echo "MACOS_CROSS_COMPILER=$PWD/macos-cross-compiler" >>"$GITHUB_ENV"
-        shell: bash
-
       - name: Building ...
         run: |
-          echo "MACOS_SDK_TARBALL_PATH=$MACOS_CROSS_COMPILER/osxcross/tarballs/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
-          echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
+          echo "MACOS_SDK_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/tarballs/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
+          echo "SRC_TARBALL_PATH=$(realpath ..)/macos-cross-compiler-src.tar.xz" >>"$GITHUB_ENV"
+          echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
 
           cat <<'EOF' >"$PWD/action-ci-build.sh"
-          cd /workspace || exit
-          # make sure you have a proper C/C++ native compiler first, as a suggestion:
-          sudo apt-get install llvm-dev libclang-dev clang libxml2-dev libz-dev libgmp-dev libmpfr-dev libmpc-dev -y
-
           install -d $MACOS_CROSS_COMPILER/osxcross
           cd $MACOS_CROSS_COMPILER || exit
           git clone https://github.com/LiangchengJ/osxcross.git && cd osxcross || exit
 
           # picked this version as they work well with godot-rust, feel free to change
           git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
-
           curl -L -O https://github.com/LiangchengJ/macos-cross-compiler/raw/25a045dd37e1b3e8172a01657f28807f1518557a/build_gcc.sh
 
-          sudo cp /root/MacOSX10.10.sdk.tar.xz .
-          # move the file where osxcross expects it to be
-          mv MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
+          sudo cp /root/MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && GCC_VERSION="$(gcc -v 2>&1 | awk 'END{print $3}')" ./build_gcc.sh
 
-          # build and install osxcross
-          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && OCDEBUG=1 ./build_gcc.sh
+          cd /workspace || exit
+          tar -cJf macos-cross-compiler-src.tar.xz macos-cross-compiler
 
-          cd ../../
-          tar -cvJf macos-cross-compiler.tar.xz macos-cross-compiler
+          cd $MACOS_CROSS_COMPILER/osxcross || exit
+          mv target macos-cross-compiler
+          tar -cJf macos-cross-compiler.tar.xz macos-cross-compiler
           EOF
 
           exec docker run -v "$PWD:/workspace" \
-              -e MACOS_CROSS_COMPILER=$MACOS_CROSS_COMPILER \
+              -e MACOS_CROSS_COMPILER=/workspace/macos-cross-compiler \
               --entrypoint=bash "liangchengj/macos-cross-compiler-builder" -ex "/workspace/action-ci-build.sh"
         shell: bash
+
+      - name: Publish compiler source artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS Cross Compiler Source
+          path: ${{ env.SRC_TARBALL_PATH }}
 
       - name: Publish compiler artifact
         uses: actions/upload-artifact@v3
