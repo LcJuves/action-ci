@@ -34,7 +34,7 @@ jobs:
           curl -L -O https://github.com/LiangchengJ/macos-cross-compiler/raw/25a045dd37e1b3e8172a01657f28807f1518557a/build_gcc.sh
 
           sudo cp /root/MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
-          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && GCC_VERSION="$(gcc -v 2>&1 | awk 'END{print $3}')" ./build_gcc.sh
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && ./build_gcc.sh
 
           cd /workspace || exit
           tar -cJf macos-cross-compiler-src.tar.xz macos-cross-compiler
