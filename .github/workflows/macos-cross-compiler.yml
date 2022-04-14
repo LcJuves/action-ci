@@ -21,7 +21,7 @@ jobs:
       - name: Building ...
         run: |
           echo "MACOS_SDK_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/tarballs/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
-          echo "SRC_TARBALL_PATH=$(realpath ..)/macos-cross-compiler-src.tar.xz" >>"$GITHUB_ENV"
+          echo "SRC_TARBALL_PATH=$PWD/macos-cross-compiler-src.tar.xz" >>"$GITHUB_ENV"
           echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
 
           cat <<'EOF' >"$PWD/action-ci-build.sh"
@@ -31,7 +31,6 @@ jobs:
 
           # picked this version as they work well with godot-rust, feel free to change
           git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
-          curl -L -O https://github.com/LiangchengJ/macos-cross-compiler/raw/25a045dd37e1b3e8172a01657f28807f1518557a/build_gcc.sh
 
           sudo cp /root/MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh && ./build_gcc.sh
