@@ -33,7 +33,7 @@ jobs:
           git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
 
           sudo cp /root/MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
-          OSX_VERSION_MIN=10.7 ./build.sh
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
 
           cd /workspace || exit
           tar -cJf macos-cross-compiler-src.tar.xz macos-cross-compiler
