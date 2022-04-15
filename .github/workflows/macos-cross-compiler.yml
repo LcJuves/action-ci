@@ -30,9 +30,10 @@ jobs:
           git clone https://github.com/LiangchengJ/osxcross.git && cd osxcross || exit
 
           # picked this version as they work well with godot-rust, feel free to change
-          git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
+          # git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
 
-          sudo cp /root/MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
+          curl -L -O https://gitlab.com/LiangchengJ/fserv/-/raw/main/txz/MacOSX10.10.sdk.tar.xz
+          mv MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
 
           cd /workspace || exit
