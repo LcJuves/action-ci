@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Building ...
         run: |
-          echo "MACOS_SDK_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/tarballs/MacOSX10.10.sdk.tar.xz" >>"$GITHUB_ENV"
+          echo "MACOS_SDK_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/tarballs/MacOSX12.3.sdk.tar.xz" >>"$GITHUB_ENV"
           echo "SRC_TARBALL_PATH=$PWD/macos-cross-compiler-src.tar.xz" >>"$GITHUB_ENV"
           echo "OUT_TARBALL_PATH=$PWD/macos-cross-compiler/osxcross/macos-cross-compiler.tar.xz" >>"$GITHUB_ENV"
 
@@ -32,9 +32,9 @@ jobs:
           # picked this version as they work well with godot-rust, feel free to change
           # git checkout 7c090bd8cd4ad28cf332f1d02267630d8f333c19
 
-          curl -L -O https://gitlab.com/LiangchengJ/fserv/-/raw/main/txz/MacOSX10.10.sdk.tar.xz
-          mv MacOSX10.10.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
-          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+          curl -L -O https://gitlab.com/LiangchengJ/fserv/-/raw/main/txz/MacOSX12.3.sdk.tar.xz
+          mv MacOSX12.3.sdk.tar.xz $MACOS_CROSS_COMPILER/osxcross/tarballs/
+          UNATTENDED=yes OSX_VERSION_MIN=10.10 CLANG_VERSION=13.0.1 ./build.sh
 
           cd /workspace || exit
           tar -cJf macos-cross-compiler-src.tar.xz macos-cross-compiler
