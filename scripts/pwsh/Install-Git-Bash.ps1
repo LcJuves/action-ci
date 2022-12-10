@@ -1,3 +1,9 @@
+$platform = [System.Environment]::OSVersion.Platform
+if (!$platform.ToString().StartsWith('Win')) {
+    Write-Host "Support Windows only!"
+    exit -1
+}
+
 function Start-DownloadWithRetry {
     Param
     (
@@ -68,7 +74,8 @@ foreach ($release in $responseJson) {
                 $filePath = Start-DownloadWithRetry -Url $downloadUrl -Name $name
 
                 Write-Host "Starting Install ..."
-                $bootstrapperArgumentList = ('/SILENT', '/NORESTART', '/DIR="C:\Git"')
+                $systemDrive = (Get-CimInstance -ClassName Win32_OperatingSystem).SystemDrive
+                $bootstrapperArgumentList = ('/SILENT', '/NORESTART', "/DIR=`"$systemDrive\Users\$env:username\Git\`"")
                 $process = Start-Process -FilePath $filePath -ArgumentList $bootstrapperArgumentList -Wait -PassThru
 
                 $exitCode = $process.ExitCode
