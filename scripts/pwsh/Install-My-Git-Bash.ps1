@@ -31,24 +31,37 @@ Add-Type -MemberDefinition @"
 [DllImport("user32.dll", SetLastError = true)]
 private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-[DllImport("user32.dll", SetLastError = true)]
-private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+[DllImport("user32.dll")]
+private static extern IntPtr GetForegroundWindow();
 
 [DllImport("user32.dll")]
 private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 
-public static int FindAndFocusWindow(string windowName) {
+public static void FindAndFocusWindow(string windowName) {
+    const int MAX_RETRY_COUNT = 60;
     int retryCount = 1;
-    int hWnd = (int)FindWindow(null, windowName);
+    IntPtr hWnd;
     while (true) {
-        if (hWnd != 0 || retryCount == 60) break;
+        hWnd = FindWindow(null, windowName);
+        if (hWnd != IntPtr.Zero || retryCount == MAX_RETRY_COUNT) break;
         retryCount++;
         System.Threading.Thread.Sleep(500);
-        hWnd = (int)FindWindow(null, windowName);
     }
-    SwitchToThisWindow(new IntPtr(hWnd), true);
-    System.Threading.Thread.Sleep(1500);
-    return hWnd;
+    if (hWnd == IntPtr.Zero) {
+        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+    }
+
+
+    retryCount = 1;
+    while (true) {
+        if ((SetForegroundWindow(hWnd) && GetForegroundWindow() == hWnd) || retryCount == MAX_RETRY_COUNT) break;
+        retryCount++;
+        System.Threading.Thread.Sleep(500);
+    }
 }
 
 public static void SendKeys(byte[] vks) {
@@ -94,7 +107,6 @@ function Send-Command-To-Git-Bash-Window {
     Set-Clipboard -Value " "
 }
 
-Start-Sleep -Seconds 3
 Send-Command-To-Git-Bash-Window @"
 (curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
 "@
