@@ -47,7 +47,6 @@ public static int FindAndFocusWindow(string windowName) {
         hWnd = (int)FindWindow(null, windowName);
     }
     SwitchToThisWindow(new IntPtr(hWnd), true);
-    System.Threading.Thread.Sleep(1500);
     return hWnd;
 }
 
