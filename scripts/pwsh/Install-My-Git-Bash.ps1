@@ -94,6 +94,7 @@ function Send-Command-To-Git-Bash-Window {
     Set-Clipboard -Value " "
 }
 
+Start-Sleep -Seconds 3
 Send-Command-To-Git-Bash-Window @"
 (curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
 "@
