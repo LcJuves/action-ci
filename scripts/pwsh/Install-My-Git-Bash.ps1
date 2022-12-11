@@ -41,27 +41,36 @@ private static extern IntPtr GetForegroundWindow();
 [DllImport("user32.dll")]
 private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 
+private static void ElevateProcess() {
+    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+    startInfo.FileName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+    startInfo.Verb = "runas";
+    System.Diagnostics.Process.Start(startInfo);
+}
+
 public static void FindAndFocusWindow(string windowName) {
-    const int MAX_RETRY_COUNT = 60;
-    int retryCount = 1;
-    IntPtr hWnd;
-    while (true) {
-        hWnd = FindWindow(null, windowName);
-        if (hWnd != IntPtr.Zero || retryCount == MAX_RETRY_COUNT) break;
-        retryCount++;
-        System.Threading.Thread.Sleep(500);
-    }
-    if (hWnd == IntPtr.Zero) {
-        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
-    }
+    System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent());
+    if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator)) {
+        const int MAX_RETRY_COUNT = 60;
+        int retryCount = 1;
+        IntPtr hWnd;
+        while (true) {
+            hWnd = FindWindow(null, windowName);
+            if (hWnd != IntPtr.Zero || retryCount == MAX_RETRY_COUNT) break;
+            retryCount++;
+            System.Threading.Thread.Sleep(500);
+        }
+        if (hWnd == IntPtr.Zero) {
+            throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+        }
 
-
-    retryCount = 1;
-    while (true) {
-        if ((SetForegroundWindow(hWnd) && GetForegroundWindow() == hWnd) || retryCount == MAX_RETRY_COUNT) break;
-        retryCount++;
-        System.Threading.Thread.Sleep(500);
-    }
+        retryCount = 1;
+        while (true) {
+            if ((SetForegroundWindow(hWnd) && GetForegroundWindow() == hWnd) || retryCount == MAX_RETRY_COUNT) break;
+            retryCount++;
+            System.Threading.Thread.Sleep(500);
+        }
+    } else ElevateProcess();
 }
 
 public static void SendKeys(byte[] vks) {
