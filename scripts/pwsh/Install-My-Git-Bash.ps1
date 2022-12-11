@@ -4,11 +4,11 @@ if (!$platform.ToString().StartsWith('Win')) {
     exit -1
 }
 
-$bootstrapperArgumentList = ('-Command', 'irm https://liangchengj.github.io/action-ci/scripts/pwsh/Install-Git-Bash.ps1 | iex')
-$process = Start-Process -FilePath powershell.exe -ArgumentList $bootstrapperArgumentList -Wait -PassThru
-$exitCode = $process.ExitCode
-if (!$exitCode -eq 0) {
-    exit $exitCode
+$installGitBashArgs = ('-Command', 'irm https://liangchengj.github.io/action-ci/scripts/pwsh/Install-Git-Bash.ps1 | iex')
+$installGitBashProc = Start-Process -FilePath powershell.exe -ArgumentList $installGitBashArgs -Verb RunAs -Wait -PassThru
+$installGitBashProcExitCode = $installGitBashProc.ExitCode
+if (!$installGitBashProcExitCode -eq 0) {
+    exit $installGitBashProcExitCode
 }
 
 function Get-Git-Install-Path-Property {
@@ -20,9 +20,8 @@ function Get-Git-Install-Path-Property {
     }
 }
 
-
 $installPath = (Get-Git-Install-Path-Property).InstallPath.ToString()
-$gitBashProcess = Start-Process -FilePath "$installPath\git-bash.exe" -Verb RunAs -PassThru
+$gitBashProcess = Start-Process -FilePath "$installPath\git-bash.exe" -WorkingDirectory $installPath -Verb RunAs -PassThru
 $gitBashExitCode = $gitBashProcess.ExitCode
 if (!$gitBashExitCode -eq 0) {
     exit $gitBashExitCode
@@ -42,12 +41,13 @@ public static int FindAndFocusWindow(string windowName) {
     int retryCount = 1;
     int hWnd = (int)FindWindow(null, windowName);
     while (true) {
-        if (hWnd != 0 || retryCount == 20) break;
+        if (hWnd != 0 || retryCount == 60) break;
         retryCount++;
         System.Threading.Thread.Sleep(500);
         hWnd = (int)FindWindow(null, windowName);
     }
     SwitchToThisWindow(new IntPtr(hWnd), true);
+    System.Threading.Thread.Sleep(1500);
     return hWnd;
 }
 
@@ -58,24 +58,42 @@ public static void SendKeys(byte[] vks) {
     }
 }
 
-public static void CtrlV() {
-    const byte VK_CTRL = 0xA2;
-    keybd_event(VK_CTRL, 0, 0, 0);
-    SendKeys(new byte[] { 0x56 });
-    keybd_event(VK_CTRL, 0, 2, 0);
+public static void ShiftIns() {
+    const byte VK_SHIFT = 0x10;
+    const byte VK_INSERT = 0x2D;
+    keybd_event(VK_SHIFT, 0, 0, 0);
+    SendKeys(new byte[] { VK_INSERT });
+    keybd_event(VK_SHIFT, 0, 2, 0);
 }
 
 public static void Enter() {
     const byte VK_ENTER = 0x0D;
     SendKeys(new byte[] { VK_ENTER });
 }
-"@ -Name FunctionsV10 -Namespace Win32API -PassThru
-$hWnd = [Win32API.FunctionsV10]::FindAndFocusWindow("MINGW64:/c/Users/admin_15569366340196/Desktop/WorkSpace/MyApp")
-Write-Host "Git Bash's HWND >>> $hWnd"
-Start-Sleep -Seconds 3
+"@ -Name FunctionsV14 -Namespace Win32API -PassThru
 
-Set-Clipboard -Value "curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh"
-[Win32API.FunctionsV10]::CtrlV()
-Start-Sleep -Seconds 1
-[Win32API.FunctionsV10]::Enter()
-Set-Clipboard -Value " "
+function Switch-To-Git-Bash-Window {
+    $bitInfo = if ([System.Environment]::Is64BitOperatingSystem) { "64" } else { "32" }
+    $hWnd = [Win32API.FunctionsV14]::FindAndFocusWindow("MINGW${bitInfo}:/")
+    if ($hWnd -eq 0) {
+        Write-Host "Can't find `Git Bash` window"
+        return -1
+    }
+}
+
+function Send-Command-To-Git-Bash-Window {
+    param (
+        [string] $CommandLine
+    )
+
+    Set-Clipboard -Value "$CommandLine"
+    Switch-To-Git-Bash-Window
+    [Win32API.FunctionsV14]::ShiftIns()
+    Switch-To-Git-Bash-Window
+    [Win32API.FunctionsV14]::Enter()
+    Set-Clipboard -Value " "
+}
+
+Send-Command-To-Git-Bash-Window @"
+(curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
+"@
