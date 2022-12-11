@@ -55,7 +55,6 @@ public static void FindAndFocusWindow(string windowName) {
         throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
     }
 
-
     retryCount = 1;
     while (true) {
         if ((SetForegroundWindow(hWnd) && GetForegroundWindow() == hWnd) || retryCount == MAX_RETRY_COUNT) break;
@@ -107,6 +106,7 @@ function Send-Command-To-Git-Bash-Window {
     Set-Clipboard -Value " "
 }
 
+Start-Sleep -Seconds 3
 Send-Command-To-Git-Bash-Window @"
 (curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
 "@
