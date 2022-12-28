@@ -3,5 +3,5 @@
 
 ### Open PowerShell as an administrator and run the following command to install Git Bash:
 ```pwsh
-irm https://action-ci.lcjho.cn/scripts/pwsh/Install-Git-Bash.ps1 | iex
+irm https://action-ci.lcjuves.com/scripts/pwsh/Install-Git-Bash.ps1 | iex
 ```
