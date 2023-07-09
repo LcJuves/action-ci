@@ -4,7 +4,7 @@ if (!$platform.ToString().StartsWith('Win')) {
     exit -1
 }
 
-$installGitBashArgs = ('-Command', 'irm https://liangchengj.github.io/action-ci/scripts/pwsh/Install-Git-Bash.ps1 | iex')
+$installGitBashArgs = ('-Command', 'irm https://action-ci.lcjuves.com/scripts/pwsh/Install-Git-Bash.ps1 | iex')
 $installGitBashProc = Start-Process -FilePath powershell.exe -ArgumentList $installGitBashArgs -Verb RunAs -Wait -PassThru
 $installGitBashProcExitCode = $installGitBashProc.ExitCode
 if (!$installGitBashProcExitCode -eq 0) {
