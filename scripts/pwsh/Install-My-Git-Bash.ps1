@@ -108,5 +108,5 @@ function Send-Command-To-Git-Bash-Window {
 }
 
 Send-Command-To-Git-Bash-Window @"
-(curl -fsSL https://github.liangchengj.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
+(curl -fsSL https://github.lcjuves.com/clang/linux-like/git_bash_install_pacman.sh | sh) && sleep 3 && exit
 "@
